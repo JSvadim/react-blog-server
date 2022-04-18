@@ -3,12 +3,11 @@ import userService from "../services/user-service.js";
 class UserController {
     async getOneUser(req, res) {
         try {
-            const isEmail = isNaN(req.params.id);
+            // uses only query parameter to get user(nickname, id, email);
+            const selectorType = Object.keys(req.query)[0];
             const selector = { 
-                type: isEmail ? 'email' : 'id',
-                value: isEmail ? 
-                    req.params.email : 
-                    req.params.id,
+                type: selectorType,
+                value: req.query[selectorType]
             }
             const user = await userService.getOneUser(selector);
             res.json(user);
@@ -27,6 +26,7 @@ class UserController {
         }
     }
     async updateUser(req, res) {
+        //TODO
         try {
             const updatedUser = await userService.updateUser(req.body);
             res.json(updatedUser);

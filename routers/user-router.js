@@ -3,6 +3,6 @@ import userController from "../controllers/user-controller.js";
 
 export const userRouter = new Router();
 
-userRouter.get('/:id/:email', userController.getOneUser);
-userRouter.get('/', userController.getAllUsers);
-userRouter.put('/:id', userController.updateUser);
+userRouter.get('', userController.getOneUser);
+userRouter.get('/all', userController.getAllUsers);
+userRouter.put('', userController.updateUser);
