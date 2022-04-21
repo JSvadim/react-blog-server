@@ -1,9 +1,12 @@
 //third-party
 import bcrypt from "bcrypt";
+import { v4 as uuidv4 } from "uuid";
 
 //local imports
 import userService from "../services/user-service.js";
 import authService from "../services/auth-service.js";
+import emailService from "../services/email-service.js";
+import tokenService from "../services/token-service.js";
 
 class AuthController {
     async logIn(req, res) {
@@ -35,14 +38,18 @@ class AuthController {
                 (gender === "other") ? 
                 req.body.otherGender : 
                 gender;
+            const activationLink = uuidv4();
             const createdUser = await authService.signIn({
-                email: email,
+                email,
                 password: hashedPassword,
-                nickname: nickname,
-                gender: genderValue
+                nickname,
+                gender: genderValue,
+                activationLink
             })
+            await emailService.sendActivationMail( email, activationLink );
             res.json({
-                "new-user": createdUser,
+                "new-user": createdUser.user,
+                tokens: createdUser.tokens,
                 message: "registration is successful"
             })
         } catch(e) {
