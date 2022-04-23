@@ -1,7 +1,7 @@
 import userService from "../services/user-service.js";
 
 class UserController {
-    async getOneUser(req, res) {
+    async getOneUser(req, res, next) {
         try {
             // uses only query parameter to get user(nickname, id, email);
             const selectorType = Object.keys(req.query)[0];
@@ -12,8 +12,7 @@ class UserController {
             const user = await userService.getOneUser(selector);
             res.json(user);
         } catch(e) {
-            res.status(500);
-            throw e;
+            next(e);
         }
     }
     async activate(req, res) {
@@ -21,8 +20,7 @@ class UserController {
             await userService.activate(req.params.link);
             res.redirect(process.env.CLIENT_URL);
         } catch(e) {
-            res.status(500);
-            throw e;
+            next(e);
         }
     }
     async getAllUsers(req, res) {
@@ -30,8 +28,7 @@ class UserController {
             const users = await userService.getAllUsers();
             res.json(users);
         } catch(e) {
-            res.status(500);
-            throw e;
+            next(e);
         }
     }
     async updateUser(req, res) {
@@ -40,8 +37,7 @@ class UserController {
             const updatedUser = await userService.updateUser(req.body);
             res.json(updatedUser);
         } catch(e) {
-            res.status(500);
-            throw e;
+            next(e);
         }
     }
 }

@@ -6,31 +6,28 @@ import { v4 as uuidv4 } from "uuid";
 import userService from "../services/user-service.js";
 import authService from "../services/auth-service.js";
 import emailService from "../services/email-service.js";
-import tokenService from "../services/token-service.js";
+import { ApiError } from "../exceptions/api-error.js";
 
 class AuthController {
-    async logIn(req, res) {
+    async logIn(req, res, next) {
         try {
 
         } catch(e) {
-            console.log(e);
-            res.status(500).json({
-                message: `Error: ${e}`
-            });
+            next(e)
         }
 
     }
-    async signIn(req, res) {
+    async signIn(req, res, next) {
         try {
             const { nickname, email, password, gender } = req.body;
             // nickname and email check START
             const nicknameMatch = await userService.getOneUser({type:"nickname", value: nickname});
             if(nicknameMatch) {
-                return res.status(500).json({message:"Sorry, such nickname already exists :("});
+                throw ApiError.badRequest("Sorry, such nickname already exists :(");
             }
             const emailMatch = await userService.getOneUser({type:"email", value: email});
             if(emailMatch) {
-                return res.status(500).json({message:"Sorry, user with that email already exists :("});
+                throw ApiError.badRequest("Sorry, user with that email already exists :(");
             }
             // nickname and email check END
             const hashedPassword = await bcrypt.hash(password, 11);
@@ -60,10 +57,7 @@ class AuthController {
                 message: "registration is successful"
             })
         } catch(e) {
-            res.status(500).json({
-                message: "server error",
-                errorData: e
-            });
+            next(e);
         }
     }
 }
