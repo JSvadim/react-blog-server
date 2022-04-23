@@ -1,5 +1,9 @@
-//third-party
+// third-party
 import nodeMailer from "nodemailer";
+
+// local imports
+import pool from "../config/db.js";
+
 
 class EmailService {
 
@@ -16,7 +20,7 @@ class EmailService {
         })
     }
 
-    async sendActivationMail( email, nickname, link ) {
+    async sendActivationMail(email, nickname, link) {
         this.transponter.sendMail({
             to: email,
             text: '',
@@ -52,6 +56,13 @@ class EmailService {
                 </style>
             `
         })
+    }
+
+    async isEmailActivated(userId) {
+        const sqlQuery = `SELECT isActivated FROM email_activation WHERE id_user = ?`;
+        const activationInfo = await pool.query(sqlQuery, userId);
+        const isActivated = activationInfo[0][0].isActivated ? true : false;
+        return isActivated
     }
 }
 
