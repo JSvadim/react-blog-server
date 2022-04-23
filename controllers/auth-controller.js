@@ -46,7 +46,14 @@ class AuthController {
                 gender: genderValue,
                 activationLink
             })
-            await emailService.sendActivationMail( email, activationLink );
+            await emailService.sendActivationMail( email, nickname, `${process.env.API_URL}/user/activate-account/${activationLink}` );
+            res.cookie("refreshToken", 
+                createdUser.tokens.refreshToken, 
+                {
+                    maxAge: 30 * 24 * 60 * 60 * 1000,
+                    httpOnly: true,
+                }
+            )
             res.json({
                 "new-user": createdUser.user,
                 tokens: createdUser.tokens,

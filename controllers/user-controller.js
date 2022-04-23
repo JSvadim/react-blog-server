@@ -16,6 +16,15 @@ class UserController {
             throw e;
         }
     }
+    async activate(req, res) {
+        try {
+            await userService.activate(req.params.link);
+            res.redirect(process.env.CLIENT_URL);
+        } catch(e) {
+            res.status(500);
+            throw e;
+        }
+    }
     async getAllUsers(req, res) {
         try {
             const users = await userService.getAllUsers();

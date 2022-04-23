@@ -52,6 +52,13 @@ class UserService {
         const result = await pool.query(sqlQuery);
         return result[0]
     }
+
+    async activate(link) {
+        const sqlQuery =  `UPDATE email_activation
+            SET isActivated = true
+            WHERE activation_link = ?`;
+        await pool.query(sqlQuery, link);
+    }
     
     async updateUser(userData) {}
 

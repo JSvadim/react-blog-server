@@ -1,6 +1,8 @@
+//third-party
 import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
+import cookieParser from 'cookie-parser';
 
 //routers
 import { userRouter } from "./routers/user-router.js";
@@ -15,6 +17,7 @@ app.use(cors({
     origin: 'http://localhost:3000',
     optionsSuccessStatus: 200
 }));
+app.use(cookieParser());
 app.use(express.json());
 
 //routers
