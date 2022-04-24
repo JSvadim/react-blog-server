@@ -10,6 +10,19 @@ import { authRouter } from "./routers/auth-router.js";
 //middlewares
 import { errorHandler }from "./middlewares/errorHandler.js";
 
+// this heops to prevent node app crash if nodemailer gets unavailible email :)
+process.on('uncaughtException', (error, origin) => {
+    console.log('----- Uncaught exception -----')
+    console.log(error)
+    console.log('----- Exception origin -----')
+    console.log(origin)
+})
+process.on('unhandledRejection', (reason, promise) => {
+    console.log('----- Unhandled Rejection at -----')
+    console.log(promise)
+    console.log('----- Reason -----')
+    console.log(reason)
+})
 
 const app = express();
 const PORT = process.env.PORT || 5000;
