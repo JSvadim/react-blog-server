@@ -12,15 +12,11 @@ import { ApiError } from "../exceptions/api-error.js";
 
 
 class AuthService {
-    async logIn(email, password) {
+
+    async logIn( email, password ) {
         const user = await userService.getOneUser({type:"email", value: email});
         if(!user) {
             throw ApiError.badRequest("Sorry, user with that email doesn't exist :(");
-        }
-
-        const isEmailActivated = await emailService.isEmailActivated(user.id);
-        if(!isEmailActivated) {
-            throw ApiError.badRequest("Email isn't activated. Visit your email and use activation link.");
         }
 
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
@@ -34,7 +30,8 @@ class AuthService {
         await tokenService.saveToken(user.id, tokens.refreshToken);
         return { user, tokens};
     }
-    async signIn(data) {
+
+    async signIn( data ) {
 
         const { nickname, email, password, gender } = data;
 
@@ -85,6 +82,11 @@ class AuthService {
         await tokenService.saveToken(user.id, tokens.refreshToken);
         return { user, tokens};
     }
+
+    async logOut( refreshToken ) {
+        await tokenService.removeToken( refreshToken );
+    }
+
 }
 
 export default new AuthService();
