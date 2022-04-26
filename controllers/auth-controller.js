@@ -4,6 +4,7 @@
 import authService from "../services/auth-service.js";
 
 class AuthController {
+
     async logIn(req, res, next) {
         try {
             const { email, password } = req.body;
@@ -23,6 +24,7 @@ class AuthController {
             next(e)
         }
     }
+
     async signIn(req, res, next) {
         try {
             const { nickname, email, password, gender } = req.body;
@@ -54,6 +56,18 @@ class AuthController {
             next(e);
         }
     }
+
+    async logOut(req, res, next) {
+        try {
+            const refreshToken = req.cookie;
+            await authService.logOut(refreshToken);
+            res.clearCookie("refreshToken");
+            res.status(200).json("logged out");
+        } catch(e) {
+            next(e);
+        }
+    }
+
 }
 
 export default new AuthController();
