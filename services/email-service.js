@@ -20,42 +20,45 @@ class EmailService {
         })
     }
 
-    async sendActivationMail(email, nickname, link) {
+    async sendActivationMail(email, nickname, code) {
         this.transponter.sendMail({
             to: email,
             text: '',
             subject: `${process.env.API_URL} account activation`,
             secure: true,
             html: `
-                <div class="smtpmsg">
-                    <p class="smtpmsg__message">
+                <div>
+                    <p style="font-size: 18px;">
                         <span style="display:block; margin: 0 0 10px 0">Hello, ${nickname}!</span>
-                        If you've signed in at ${process.env.API_URL}, use bottom link to activate
-                        the account.
+                        <span style="display:block; margin: 0 0 10px 0">
+                            If you've signed in at ${process.env.API_URL}, use bottom code to activate
+                            the account.
+                        </span>
+                        <span style="display:block; font-size: 20px; margin: 0 0 10px 0; color: blueviolet;">
+                            ${code}
+                        </span>
                     </p>
-                    <a class="smtpmsg__activate-link" href="${link}" target="_blank">
-                        Activate the account
-                    </a>
                 </div>
-                <style>
-                    .smtpmsg__message {
-                        font-size: 18px; 
-                        margin: 0 0 30px 0;
-                    }
-                    .smtpmsg__activate-link {
-                        background-color: blueviolet; 
-                        display: inline-block; 
-                        border-radius: 20px; 
-                        padding: 10px 25px;
-                        color: white;
-                        transition: all 0.5s;
-                    }
-                    .smtpmsg__activate-link:hover {
-                        border-radius: 5px;
-                    }
-                </style>
             `
         })
+    }
+
+    async addActivationInfo(email, code) {
+        const sqlQueryGetRow = `SELECT * FROM email_activation WHERE email = ?`;
+        const sqlQueryDropRow = `DELETE FROM email_activation WHERE email = ?`;
+        const sqlQueryInsertRow = `INSERT INTO email_activation(email, code) VALUES(?, ?)`;
+        const existingRow = await pool.query(sqlQueryGetRow, email);
+        if(existingRow) {
+            await pool.query(sqlQueryDropRow, email);
+        }
+        await pool.query(sqlQueryInsertRow, [email, code]);
+    }
+
+    async checkActivationCode(email, code) {
+        const sqlQuery = `SELECT code FROM email_activation WHERE email = ?`;
+        const databaseCode = await pool.query(sqlQuery, email);
+        console.log(databaseCode[0][0]);
+        return databaseCode[0][0].code === code ? true : false
     }
 
     async isEmailActivated(userId) {

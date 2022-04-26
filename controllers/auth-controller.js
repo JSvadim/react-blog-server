@@ -1,5 +1,4 @@
 //third-party
-import { v4 as uuidv4 } from "uuid";
 
 //local imports
 import authService from "../services/auth-service.js";
@@ -29,14 +28,16 @@ class AuthController {
             const { nickname, email, password, gender } = req.body;
             const genderValue = (gender === "other") ? 
                 req.body.otherGender : gender;
-            const activationLink = uuidv4();
             const createdUser = await authService.signIn({
                 email,
                 password,
                 nickname,
                 gender: genderValue,
-                activationLink
+                activationCode: req.body.activationCode ? req.body.activationCode : ''
             })
+            if(!createdUser) {
+                return res.json("activation mail has been sent");
+            }
             res.cookie("refreshToken", 
                 createdUser.tokens.refreshToken, 
                 {

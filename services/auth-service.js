@@ -1,5 +1,6 @@
 // third party
 import bcrypt from "bcrypt";
+import { v4 as uuidv4 } from "uuid";
 
 // local imports
 import pool from "../config/db.js";
@@ -35,7 +36,7 @@ class AuthService {
     }
     async signIn(data) {
 
-        const { nickname, email, password, gender, activationLink } = data;
+        const { nickname, email, password, gender } = data;
 
         // nickname and email check START
         const nicknameMatch = await userService.getOneUser({type:"nickname", value: nickname});
@@ -48,6 +49,17 @@ class AuthService {
             throw ApiError.badRequest("Sorry, user with that email already exists :(");
         }
         // nickname and email check END
+        
+        if(!data.activationCode) {
+            const randomString = uuidv4();
+            await emailService.addActivationInfo( email, randomString);
+            return await emailService.sendActivationMail( email, nickname, randomString );
+        }
+
+        const codeMatch = await emailService.checkActivationCode( email, data.activationCode);
+        if(!codeMatch) {
+            throw ApiError.badRequest("Your code is not correct");
+        }
 
         const sqlRegistrationQuery = `
             START TRANSACTION; 
@@ -58,19 +70,14 @@ class AuthService {
                 SELECT @userId := id_user FROM user WHERE nickname = @userName; 
 
                 INSERT INTO user_data ( id_user, gender ) VALUES (@userId, ?); 
-
-                INSERT INTO email_activation ( id_user, activation_link )
-                    VALUES ( @userId, ? );
                 
             COMMIT; 
         `
         const hashedPassword = await bcrypt.hash(password, 11);
 
         await pool.query(sqlRegistrationQuery, 
-            [email, hashedPassword, nickname, gender, activationLink]);
-
-        const user = await userService.getOneUser({type: "nickname", value: nickname});
-        await emailService.sendActivationMail( email, nickname, `${process.env.API_URL}/user/activate-account/${activationLink}` );
+            [email, hashedPassword, nickname, gender]);
+        const user = await userService.getOneUser({type: "nickname", value: nickname}); 
 
         const userDto = new UserDto(user);
         const tokens = tokenService.generateTokens({...userDto});
