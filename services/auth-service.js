@@ -13,7 +13,7 @@ import { ApiError } from "../exceptions/api-error.js";
 
 class AuthService {
 
-    async logIn( email, password ) {
+    async logIn(email,password) {
         const user = await userService.getOneUser({type:"email", value: email});
         if(!user) {
             throw ApiError.badRequest("Sorry, user with that email doesn't exist :(");
@@ -31,7 +31,7 @@ class AuthService {
         return { user, tokens};
     }
 
-    async signIn( data ) {
+    async signIn(data) {
 
         const { nickname, email, password, gender } = data;
 
@@ -83,8 +83,32 @@ class AuthService {
         return { user, tokens};
     }
 
-    async logOut( refreshToken ) {
+    async logOut(refreshToken) {
         await tokenService.removeToken( refreshToken );
+    }
+
+    async refresh(refreshToken) {
+        if(!refreshToken) {
+            throw ApiError.unauthorizedUser();
+        }
+
+        const userData = tokenService.validateRefreshToken(refreshToken);
+        const isTokenInDatabase = await tokenService.getTokenData(refreshToken);
+
+        if(!userData || !isTokenInDatabase) {
+            throw ApiError.unauthorizedUser();
+        }
+
+        const user = await userService.getOneUser({
+            type: 'id_user',
+            value: userData.id
+        });
+
+        const userDto = new UserDto(user);
+        const tokens = tokenService.generateTokens({...userDto});
+        
+        await tokenService.saveToken(user.id, tokens.refreshToken);
+        return tokens
     }
 
 }
