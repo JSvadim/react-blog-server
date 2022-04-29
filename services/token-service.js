@@ -36,6 +36,29 @@ class TokenService {
         const sqlQuery = `DELETE FROM token WHERE refresh_token = '${refreshToken}'`
         await pool.query(sqlQuery);
     }
+
+    async getTokenData(refreshToken) {
+        const sqlQuery = `SELECT * FROM token WHERE refresh_token = ?`;
+        const token = await pool.query(sqlQuery, refreshToken);
+        return token[0][0]
+    }
+
+    validateAccessToken(token) {
+        try {
+            const payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET_KEY);
+            return payload
+        } catch(e) {
+            return null
+        }
+    }
+    validateRefreshToken(token) {
+        try {
+            const payload = jwt.verify(token, process.env.JWT_REFRESH_SECRET_KEY);
+            return payload
+        } catch(e) {
+            return null
+        }
+    }
 }
 
 export default new TokenService();
