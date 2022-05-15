@@ -18,10 +18,10 @@ class UserService {
             user_data.link_facebook,
             user_data.link_youtube
             FROM user 
-            	LEFT JOIN user_role
-               	ON user.id_role = user_role.id_role
                 LEFT JOIN user_data
                 ON user.id_user = user_data.id_user
+            	LEFT JOIN user_role
+                ON user_data.id_role = user_role.id_role
                 	WHERE user.${selector.type} = '${selector.value}'
         `;
         const result = await pool.query(sqlQuery);
