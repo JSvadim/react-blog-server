@@ -60,13 +60,6 @@ class EmailService {
         console.log(databaseCode[0][0]);
         return databaseCode[0][0].code === code ? true : false
     }
-
-    async isEmailActivated(userId) {
-        const sqlQuery = `SELECT isActivated FROM email_activation WHERE id_user = ?`;
-        const activationInfo = await pool.query(sqlQuery, userId);
-        const isActivated = activationInfo[0][0].isActivated ? true : false;
-        return isActivated
-    }
 }
 
 export default new EmailService();
