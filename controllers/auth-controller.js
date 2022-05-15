@@ -16,9 +16,10 @@ class AuthController {
                     httpOnly: true,
                 }
             )
+            userData.user.password = '';
             res.json({
                 user: userData.user, 
-                tokens: userData.tokens
+                token: userData.tokens.accessToken
             });
         } catch(e) {
             next(e)
@@ -46,12 +47,12 @@ class AuthController {
                     maxAge: 30 * 24 * 60 * 60 * 1000,
                     httpOnly: true,
                 }
-            )
+            );
+            createdUser.user.password = '';
             res.json({
-                "new-user": createdUser.user,
-                tokens: createdUser.tokens,
-                message: "registration is successful"
-            })
+                user: createdUser.user,
+                token: createdUser.tokens.accessToken,
+            });
         } catch(e) {
             next(e);
         }
@@ -73,13 +74,16 @@ class AuthController {
             const {refreshToken} = req.cookies;
             const userData = await authService.refresh(refreshToken);
             res.cookie("refreshToken",
-                userData.refreshToken,
+                userData.tokens.refreshToken,
                 {
                     maxAge: 30 * 24 * 60 * 60 * 1000,
                     httpOnly: true,
                 }
             );
-            res.json(userData);
+            res.json({
+                user: userData.user,
+                token: userData.tokens.accessToken
+            });
         } catch(e) {
             next(e);
         }
