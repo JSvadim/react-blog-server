@@ -108,7 +108,7 @@ class AuthService {
         const tokens = tokenService.generateTokens({...userDto});
         
         await tokenService.saveToken(user.id, tokens.refreshToken);
-        return tokens
+        return { user, tokens }
     }
 
 }
