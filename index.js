@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 //routers
 import { userRouter } from "./routers/user-router.js";
 import { authRouter } from "./routers/auth-router.js";
+import { blogRouter } from "./routers/blog-router.js";
 //middlewares
 import { errorHandler }from "./middlewares/errorHandler.js";
 
@@ -38,6 +39,7 @@ app.use(express.json());
 //routers
 app.use("/user", userRouter);
 app.use("/auth", authRouter);
+app.use("/blog", blogRouter);
 //error handler middleware
 app.use(errorHandler);
 

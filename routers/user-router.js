@@ -1,10 +1,10 @@
 import { Router } from "express";
-import userController from "../controllers/user-controller.js";
+import UserController from "../controllers/user-controller.js";
 import { authMiddleware } from "../middlewares/auth-middleware.js";
 
 export const userRouter = new Router();
 
-userRouter.get('', userController.getOneUser);
-userRouter.get('/all', authMiddleware, userController.getAllUsers);
-userRouter.get('/activate-account/:link', userController.activate);
-userRouter.put('', userController.updateUser);
+userRouter.get('', UserController.getOneUser);
+userRouter.get('/all', authMiddleware, UserController.getAllUsers);
+userRouter.get('/activate-account/:link', UserController.activate);
+userRouter.put('', UserController.updateUser);
