@@ -1,0 +1,130 @@
+TABLE user:
+    NAME          TYPE       INDEX          LENGTH     NULL   DEFAULT
+  
+    id_user       INT        PRIMARY(A.I.)  -
+    profile_pic   VARCHAR    -              150        TRUE
+    nickname      VARCHAR    UNIQUE         26
+    email         VARCHAR    UNIQUE         321
+    password      VARCHAR    -              200
+    
+    SQL: (
+        CREATE TABLE `blog`.`user` ( 
+             `id_user` INT NOT NULL AUTO_INCREMENT,
+             `profile_pic` VARCHAR(150) NULL,
+             `nickname` VARCHAR(26) NOT NULL,
+             `email` VARCHAR(321) NOT NULL,
+             `password` VARCHAR(200) NOT NULL, 
+             PRIMARY KEY (`id_user`), 
+             UNIQUE (`nickname`), 
+             UNIQUE (`email`)) 
+        ENGINE = InnoDB;
+    )
+
+TABLE user_data:
+    NAME          TYPE       INDEX        LENGTH     NULL   DEFAULT
+
+    id_user       INT        UNIQUE       -          -
+    id_role       TINYINT    -            -          -      2
+    gender        VARCHAR    -            31         -
+    birth_date    VARCHAR    -            -          TRUE
+    about         VARCHAR    -            1000       TRUE
+    link_vk       VARCHAR    -            150        TRUE
+    link_facebook VARCHAR    -            150        TRUE
+    link_insta    VARCHAR    -            150        TRUE
+    link_youtube  VARCHAR    -            150        TRUE
+
+    SQL: (
+        CREATE TABLE `blog`.`user_data` ( 
+            `id_user` INT NOT NULL, 
+            `id_role` TINYINT NOT NULL DEFAULT '2' , 
+            `gender` VARCHAR(31) NOT NULL , 
+            `birth_date` DATE NULL , 
+            `about` VARCHAR(1000) NULL , 
+            `link_vk` VARCHAR(150) NULL , 
+            `link_facebook` VARCHAR(150) NULL , 
+            `link_insta` VARCHAR(150) NULL , 
+            `link_youtube` VARCHAR(150) NULL , 
+            UNIQUE (`id_user`)) 
+        ENGINE = InnoDB;
+    )
+
+TABLE user_role:
+    NAME          TYPE       INDEX          LENGTH     NULL   DEFAULT
+
+    id_role       TINYINT    PRIMARY(A.I.)  -          -      -
+    name          VARCHAR    -              20         -      -
+
+    SQL: (
+        CREATE TABLE `blog`.`user_role` ( 
+            `id_role` TINYINT NOT NULL AUTO_INCREMENT , 
+            `name` VARCHAR NOT NULL , 
+            PRIMARY KEY (`id_role`)) 
+        ENGINE = InnoDB;
+    )
+
+TABLE email_activation:
+    NAME          TYPE       INDEX        LENGTH     NULL   DEFAULT
+
+    email         VARCHAR    UNIQUE       321        -      -
+    code          VARCHAR    -            300        -      -
+
+    SQL: (
+        CREATE TABLE `blog`.`email_activation` ( 
+            `email` VARCHAR(321) NOT NULL , 
+            `code` VARCHAR(300) NOT NULL , 
+            UNIQUE (`email`)) 
+        ENGINE = InnoDB;
+    )
+
+TABLE token:
+    NAME          TYPE       INDEX        LENGTH     NULL   DEFAULT
+
+    id_user         INT      UNIQUE       -          -      -
+    refresh_token   VARCHAR  -            300        -      -
+
+    SQL: (
+        CREATE TABLE `blog`.`token` ( 
+            `id_user` INT NOT NULL , 
+            `refresh_token` VARCHAR(300) NOT NULL , 
+            UNIQUE (`id_user`)) 
+        ENGINE = InnoDB;
+    )
+
+TABLE blog:
+    NAME          TYPE       INDEX          LENGTH     NULL   DEFAULT
+
+    id_blog       INT        PRIMARY(A.I.)  -          -      -
+    title         VARCHAR    -              200        -      -
+    text          VARCHAR    -              2000       -      -
+    date          DATETIME   -              -          -      -
+    pic_1         VARCHAR    -              150        TRUE   -
+    pic_2         VARCHAR    -              150        TRUE   -
+    pic_3         VARCHAR    -              150        TRUE   -
+    pic_4         VARCHAR    -              150        TRUE   -
+    pic_5         VARCHAR    -              150        TRUE   -
+    id_user       INT        -              -          -      -
+    nickname_user VARCHAR    -              26         -      -
+ profile_pic_user VARCHAR    -              150        -      -
+    
+    SQL: (
+        CREATE TABLE `blog`.`blog` ( 
+            `id_blog` INT NOT NULL AUTO_INCREMENT , 
+            `title` VARCHAR(200) NOT NULL , 
+            `text` VARCHAR(2000) NOT NULL , 
+            `date` DATETIME NOT NULL , 
+            `pic_1` VARCHAR(150) NULL , 
+            `pic_2` VARCHAR(150) NULL , 
+            `pic_3` VARCHAR(150) NULL , 
+            `pic_4` VARCHAR(150) NULL , 
+            `pic_5` VARCHAR(150) NULL , 
+            `id_user` INT NOT NULL , 
+            `nickname_user` VARCHAR(26) NOT NULL , 
+            `profile_pic_user` VARCHAR(150) NOT NULL , 
+            PRIMARY KEY (`id_blog`))
+         ENGINE = InnoDB;
+    )
+
+
+RELATIONS: 
+    user(id_user)  user_data(id_user)  -  one to one
+    user_role(id_role)  user(id_role)  -  one to many
