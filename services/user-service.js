@@ -33,7 +33,6 @@ class UserService {
         SELECT 
 	        user.id_user as id,
             user.email,
-            user.password,
             user.nickname,
             user_role.name as role,
             user_data.gender,

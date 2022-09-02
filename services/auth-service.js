@@ -40,7 +40,6 @@ class AuthService {
         if(nicknameMatch) {
             throw ApiError.badRequest("Sorry, such nickname already exists :(");
         }
-
         const emailMatch = await userService.getOneUser({type:"email", value: email});
         if(emailMatch) {
             throw ApiError.badRequest("Sorry, user with that email already exists :(");

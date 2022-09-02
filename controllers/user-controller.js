@@ -10,6 +10,7 @@ class UserController {
                 value: req.query[selectorType]
             }
             const user = await userService.getOneUser(selector);
+            user.password = '';
             res.json(user);
         } catch(e) {
             next(e);

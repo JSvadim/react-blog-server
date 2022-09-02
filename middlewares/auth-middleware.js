@@ -4,7 +4,6 @@ import tokenService from "../services/token-service.js";
 
 export function authMiddleware (req, res, next) {
     try { 
-        
         const authorizationHeader = req.headers.authorization;
         if(!authorizationHeader) {
             return next(ApiError.unauthorizedUser())
@@ -19,7 +18,6 @@ export function authMiddleware (req, res, next) {
         if(!userData) {
             return next(ApiError.unauthorizedUser())
         }
-
         req.user = userData;
         next();
 

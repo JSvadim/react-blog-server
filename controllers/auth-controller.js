@@ -73,6 +73,7 @@ class AuthController {
         try {
             const {refreshToken} = req.cookies;
             const userData = await authService.refresh(refreshToken);
+            userData.user.password = '';
             res.cookie("refreshToken",
                 userData.tokens.refreshToken,
                 {

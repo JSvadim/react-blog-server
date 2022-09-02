@@ -3,7 +3,6 @@ import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 import cookieParser from 'cookie-parser';
-
 //routers
 import { userRouter } from "./routers/user-router.js";
 import { authRouter } from "./routers/auth-router.js";
@@ -11,7 +10,7 @@ import { blogRouter } from "./routers/blog-router.js";
 //middlewares
 import { errorHandler }from "./middlewares/errorHandler.js";
 
-// this heops to prevent node app crash if nodemailer gets unavailible email :)
+// this helps to prevent node app crash if nodemailer gets unavailible email :)
 process.on('uncaughtException', (error, origin) => {
     console.log('----- Uncaught exception -----')
     console.log(error)
@@ -29,19 +28,20 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 //middlewares
-app.use(cors({
-    origin: 'http://localhost:3000',
-    optionsSuccessStatus: 200,
-    credentials: true,
-}));
-app.use(cookieParser());
-app.use(express.json());
+    app.use(cors({
+        origin: process.env.CLIENT_URL,
+        optionsSuccessStatus: 200,
+        credentials: true,
+    }));
+    app.use(cookieParser());
+    app.use(express.json());
+    app.use(express.static('public'));
 //routers
-app.use("/user", userRouter);
-app.use("/auth", authRouter);
-app.use("/blog", blogRouter);
+    app.use("/user", userRouter);
+    app.use("/auth", authRouter);
+    app.use("/blog", blogRouter);
 //error handler middleware
-app.use(errorHandler);
+    app.use(errorHandler);
 
 
 app.listen(PORT, () => console.log(`server has been started on port: ${PORT}`));
