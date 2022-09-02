@@ -91,21 +91,19 @@ TABLE token:
     )
 
 TABLE blog:
-    NAME          TYPE       INDEX          LENGTH     NULL   DEFAULT
+    NAME                    TYPE       INDEX          LENGTH     NULL   DEFAULT
 
-    id_blog       INT        PRIMARY(A.I.)  -          -      -
-    title         VARCHAR    -              200        -      -
-    text          VARCHAR    -              2000       -      -
-    date          DATETIME   -              -          -      -
-    pic_1         VARCHAR    -              150        TRUE   -
-    pic_2         VARCHAR    -              150        TRUE   -
-    pic_3         VARCHAR    -              150        TRUE   -
-    pic_4         VARCHAR    -              150        TRUE   -
-    pic_5         VARCHAR    -              150        TRUE   -
-    id_user       INT        -              -          -      -
-    nickname_user VARCHAR    -              26         -      -
- profile_pic_user VARCHAR    -              150        -      -
-    
+    id_blog                 INT        PRIMARY(A.I.)  -          -      -
+    title                   VARCHAR    -              200        -      -
+    text                    VARCHAR    -              2000       -      -
+    date                    DATETIME   -              -          -      -
+    pic_1                   VARCHAR    -              150        TRUE   -
+    pic_2                   VARCHAR    -              150        TRUE   -
+    pic_3                   VARCHAR    -              150        TRUE   -
+    pic_4                   VARCHAR    -              150        TRUE   -
+    pic_5                   VARCHAR    -              150        TRUE   -
+    id_user                 INT        -              -          -      -
+
     SQL: (
         CREATE TABLE `blog`.`blog` ( 
             `id_blog` INT NOT NULL AUTO_INCREMENT , 
@@ -118,8 +116,6 @@ TABLE blog:
             `pic_4` VARCHAR(150) NULL , 
             `pic_5` VARCHAR(150) NULL , 
             `id_user` INT NOT NULL , 
-            `nickname_user` VARCHAR(26) NOT NULL , 
-            `profile_pic_user` VARCHAR(150) NOT NULL , 
             PRIMARY KEY (`id_blog`))
          ENGINE = InnoDB;
     )
@@ -128,3 +124,5 @@ TABLE blog:
 RELATIONS: 
     user(id_user)  user_data(id_user)  -  one to one
     user_role(id_role)  user(id_role)  -  one to many
+
+    blog(id_user) user(id_user)  -  many to one
