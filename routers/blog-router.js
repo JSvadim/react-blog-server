@@ -7,7 +7,7 @@ const upload = multer();
 export const blogRouter = new Router();
 
 blogRouter.get("", BlogController.getBlog);
-blogRouter.get("/100", BlogController.getBlogs);
+blogRouter.get("/all", BlogController.getBlogs);
 blogRouter.post("/add",
     authMiddleware,
     upload.any(),

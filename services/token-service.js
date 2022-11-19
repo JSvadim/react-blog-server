@@ -33,8 +33,8 @@ class TokenService {
     }
 
     async removeToken(refreshToken) {
-        const sqlQuery = `DELETE FROM token WHERE refresh_token = '${refreshToken}'`
-        await pool.query(sqlQuery);
+        const sqlQuery = `DELETE FROM token WHERE refresh_token = ?`
+        await pool.query(sqlQuery, refreshToken);
     }
 
     async getTokenData(refreshToken) {

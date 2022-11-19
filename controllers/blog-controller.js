@@ -25,7 +25,9 @@ class BlogController {
     }
     async getBlogs(req, res, next) {
         try {
-
+            const id = req.query.id || undefined;
+            const blogs = await blogService.getBlogs(id);
+            res.json(blogs);
         } catch(e) {
             next(e);
         }
@@ -57,7 +59,6 @@ class BlogController {
                 const blog = await blogService.addBlog({title, text, userId, date});
                 return res.json(blog);
             }
-
             // files count checking
             if(req.files.length > 5)  req.files = req.files.slice(0, 5);
 

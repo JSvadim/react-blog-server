@@ -2,45 +2,40 @@ import pool from "../config/db.js";
 
 class BlogService {
     async getBlog(id) {
-        const sqlQuery = `SELECT * FROM blog WHERE id_blog = ${id}`
-        const blog = await pool.query(sqlQuery);
+        const sqlQuery = `SELECT * FROM blog WHERE id_blog = ?`
+        const blog = await pool.query(sqlQuery, id);
         return blog[0][0];
     }
-    async get100Blogs(multiplier) {}
+    async getBlogs(id) {
+        const sqlQuery = id ? 
+            `SELECT * FROM blog WHERE id_user = ?` :
+            `SELECT * FROM blog`;
+        const blogs = await pool.query(sqlQuery, id);
+        return blogs[0];
+    }
+
     async addBlog(blogData) {
-        console.log(blogData)
         const { title, text, userId, date, imagesNames } = blogData;
         const imagesNamesForDB = [];
-        for (let i = 0; i < 5; i++) {
-            imagesNamesForDB.push(imagesNames[i] !== undefined ? imagesNames[i] : '');
+        if(imagesNames.length > 0) {
+            for (let i = 0; i < 5; i++) {
+                imagesNamesForDB.push(imagesNames[i] ? imagesNames[i] : null);
+            }
         }
         const sqlQuery = `
         INSERT INTO 
             blog (
-                id_blog, 
-                title, 
-                text, 
-                date, 
-                pic_1, 
-                pic_2, 
-                pic_3, 
-                pic_4, 
-                pic_5, 
-                id_user
+                id_blog, title, text, date, id_user,
+                pic_1, pic_2, pic_3, pic_4, pic_5
             ) 
             VALUES (
-                NULL, '${title}', '${text}', 
-                '${date}', 
-                '${imagesNamesForDB[0]}', 
-                '${imagesNamesForDB[1]}', 
-                '${imagesNamesForDB[2]}', 
-                '${imagesNamesForDB[3]}', 
-                '${imagesNamesForDB[4]}', 
-                '${userId}'
+                NULL, ?, ?, ?, ?,
+                ?, ?, ?, ?, ?
             );
             SELECT LAST_INSERT_ID();
         `
-        const addedBlogId = (await pool.query(sqlQuery))[0][0].insertId;
+        const params = [title, text, date, userId, ...imagesNamesForDB];
+        const addedBlogId = (await pool.query(sqlQuery, params))[0][0].insertId;
         const addedBlog = (await this.getBlog(addedBlogId));
         return addedBlog
     }

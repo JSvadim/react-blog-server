@@ -22,9 +22,10 @@ class UserService {
                 ON user.id_user = user_data.id_user
             	LEFT JOIN user_role
                 ON user_data.id_role = user_role.id_role
-                	WHERE user.${selector.type} = '${selector.value}'
+                	WHERE user.?? = ?
         `;
-        const result = await pool.query(sqlQuery);
+        const params = [selector.type, selector.value];
+        const result = await pool.query(sqlQuery, params);
         return result[0][0]
     }
 
