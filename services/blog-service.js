@@ -16,25 +16,27 @@ class BlogService {
 
     async addBlog(blogData) {
         const { title, text, userId, date, imagesNames } = blogData;
-        const imagesNamesForDB = [];
-        if(imagesNames.length > 0) {
-            for (let i = 0; i < 5; i++) {
-                imagesNamesForDB.push(imagesNames[i] ? imagesNames[i] : null);
-            }
-        }
         const sqlQuery = `
         INSERT INTO 
             blog (
-                id_blog, title, text, date, id_user,
-                pic_1, pic_2, pic_3, pic_4, pic_5
+                id_blog, 
+                title, 
+                text, 
+                date, 
+                id_user,
+                pictures
             ) 
             VALUES (
-                NULL, ?, ?, ?, ?,
-                ?, ?, ?, ?, ?
+                NULL, 
+                ?, 
+                ?, 
+                ?, 
+                ?,
+                ?
             );
             SELECT LAST_INSERT_ID();
         `
-        const params = [title, text, date, userId, ...imagesNamesForDB];
+        const params = [title, text, date, userId, imagesNames || null];
         const addedBlogId = (await pool.query(sqlQuery, params))[0][0].insertId;
         const addedBlog = (await this.getBlog(addedBlogId));
         return addedBlog

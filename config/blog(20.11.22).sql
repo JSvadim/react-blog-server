@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3307
--- Время создания: Ноя 19 2022 г., 18:35
+-- Время создания: Ноя 20 2022 г., 12:06
 -- Версия сервера: 5.7.29
 -- Версия PHP: 7.4.5
 
@@ -34,11 +34,7 @@ CREATE TABLE `blog` (
   `title` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `text` varchar(2000) COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` datetime NOT NULL,
-  `pic_1` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `pic_2` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `pic_3` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `pic_4` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `pic_5` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `pictures` varchar(2000) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `id_user` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

@@ -14,7 +14,7 @@ export class ApiError extends Error {
     }
 
     static htmlChange() {
-        return new ApiError(500, "Don't change html markup, sir.");
+        return new ApiError(400, "Don't change html markup, sir.");
     }
 
     static FileSizeIsTooBig(filename) {
