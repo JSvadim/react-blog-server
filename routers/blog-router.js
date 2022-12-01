@@ -7,10 +7,9 @@ const upload = multer();
 export const blogRouter = new Router();
 
 blogRouter.get("", BlogController.getBlog);
-blogRouter.get("/all", BlogController.getBlogs);
-blogRouter.post("/add",
+blogRouter.post("",
     authMiddleware,
     upload.any(),
     BlogController.addBlog); 
-blogRouter.put("/update", BlogController.updateBlog);
-blogRouter.delete("/delete", BlogController.deleteBlog);
+blogRouter.put("", BlogController.updateBlog);
+blogRouter.delete("", BlogController.deleteBlog);

@@ -6,17 +6,19 @@ import { ImageHandler } from "../helpers/image-handler.js";
 class BlogController {
     async getBlog(req, res, next) {
         try {
-            const blog =  await blogService.getBlog(req.body.id);
-            res.json(blog);
-        } catch(e) {
-            next(e);
-        }
-    }
-    async getBlogs(req, res, next) {
-        try {
-            const id = req.query.id || undefined;
-            const blogs = await blogService.getBlogs(id);
+            
+            const blogId = req.query.blogId;
+            const userId = req.query.userId;
+            if(blogId) {
+                // if I have blogId I get one blog by id
+                const blog =  await blogService.getBlog(blogId);
+                return res.json(blog);
+            }
+            // if I have userId I get blogs of certain user
+            // if userId is undefined blogService returns all blogs
+            const blogs =  await blogService.getBlogs(userId);
             res.json(blogs);
+
         } catch(e) {
             next(e);
         }
