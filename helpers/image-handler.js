@@ -6,7 +6,7 @@ import { v1 } from "uuid";
 import fs from "fs/promises";
 import imageMin from "imagemin";
 import imageSize from "image-size";
-import imageminJpegoptim from "imagemin-jpegoptim";
+import imageMozjpeg from "imagemin-mozjpeg";
 import imageminPngquant from "imagemin-pngquant";
 
 
@@ -38,8 +38,9 @@ export class ImageHandler {
         // accepts path where original image is and compresses it
         const compressedImage = await imageMin([pathToImage], {
             plugins: [
-                imageminJpegoptim({
-                    max: 30
+                imageMozjpeg({
+                    quality: 30, 
+                    progressive: true
                 }),
                 imageminPngquant({
                     quality: [0.6, 0.8]
