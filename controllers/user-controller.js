@@ -3,11 +3,10 @@ import userService from "../services/user-service.js";
 class UserController {
     async getOneUser(req, res, next) {
         try {
-            // uses only query parameter to get user(nickname, id, email);
-            const selectorType = Object.keys(req.query)[0];
+            // uses nickname or id or email to get user
             const selector = { 
-                type: selectorType,
-                value: req.query[selectorType]
+                type: req.query.selector,
+                value: req.query.value
             }
             const user = await userService.getOneUser(selector);
             user.password = '';
