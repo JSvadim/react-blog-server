@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 import cookieParser from 'cookie-parser';
+import { useTreblle } from 'treblle';
 //routers
 import { userRouter } from "./routers/user-router.js";
 import { authRouter } from "./routers/auth-router.js";
@@ -28,6 +29,10 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 //middlewares
+    useTreblle(app, {
+        apiKey: process.env.TREBLLE_API_KEY,
+        projectId: process.env.TREBLLE_PROJECT_ID,
+    });
     app.use(cors({
         origin: process.env.CLIENT_URL,
         optionsSuccessStatus: 200,
