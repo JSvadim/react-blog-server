@@ -31,7 +31,7 @@ class EmailService {
                     <p style="font-size: 18px;">
                         <span style="display:block; margin: 0 0 10px 0">Hello, ${nickname}!</span>
                         <span style="display:block; margin: 0 0 10px 0">
-                            If you've signed in at ${process.env.API_URL}, use bottom code to activate
+                            If you've signed in at ${process.env.CLIENT_URL}, use bottom code to activate
                             the account.
                         </span>
                         <span style="display:block; font-size: 20px; margin: 0 0 10px 0; color: blueviolet;">

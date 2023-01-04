@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3307
--- Время создания: Ноя 20 2022 г., 12:06
+-- Время создания: Янв 04 2023 г., 07:43
 -- Версия сервера: 5.7.29
 -- Версия PHP: 7.4.5
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- База данных: `blog`
 --
-CREATE DATABASE IF NOT EXISTS `blog` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `blog`;
 
 -- --------------------------------------------------------
 
@@ -57,7 +55,7 @@ CREATE TABLE `email_activation` (
 
 CREATE TABLE `token` (
   `id_user` int(11) NOT NULL,
-  `refresh_token` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL
+  `refresh_token` varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -102,6 +100,14 @@ CREATE TABLE `user_role` (
   `id_role` tinyint(4) NOT NULL,
   `name` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `user_role`
+--
+
+INSERT INTO `user_role` (`id_role`, `name`) VALUES
+(1, 'admin'),
+(2, 'user');
 
 --
 -- Индексы сохранённых таблиц
@@ -167,7 +173,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT для таблицы `user_role`
 --
 ALTER TABLE `user_role`
-  MODIFY `id_role` tinyint(4) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_role` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
