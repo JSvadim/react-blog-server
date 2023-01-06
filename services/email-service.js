@@ -24,7 +24,7 @@ class EmailService {
         this.transponter.sendMail({
             to: email,
             text: '',
-            subject: `${process.env.API_URL} account activation`,
+            subject: `${process.env.CLIENT_URL} account activation`,
             secure: true,
             html: `
                 <div>
@@ -44,13 +44,10 @@ class EmailService {
     }
 
     async addActivationInfo(email, code) {
-        const sqlQueryGetRow = `SELECT * FROM email_activation WHERE email = ?`;
         const sqlQueryDropRow = `DELETE FROM email_activation WHERE email = ?`;
         const sqlQueryInsertRow = `INSERT INTO email_activation(email, code) VALUES(?, ?)`;
-        const existingRow = await pool.query(sqlQueryGetRow, email);
-        if(existingRow) {
-            await pool.query(sqlQueryDropRow, email);
-        }
+        
+        await pool.query(sqlQueryDropRow, email);
         await pool.query(sqlQueryInsertRow, [email, code]);
     }
 
