@@ -88,6 +88,7 @@ class AuthService {
 
     async refresh(refreshToken) {
         if(!refreshToken) {
+            console.log("no refresh token");
             throw ApiError.unauthorizedUser();
         }
 
@@ -97,7 +98,6 @@ class AuthService {
         if(!userData || !isTokenInDatabase) {
             throw ApiError.unauthorizedUser();
         }
-
         const user = await userService.getOneUser({
             type: 'id_user',
             value: userData.id
@@ -105,9 +105,9 @@ class AuthService {
 
         const userDto = new UserDto(user);
         const tokens = tokenService.generateTokens({...userDto});
+        const { accessToken } = tokens;
         
-        await tokenService.saveToken(user.id, tokens.refreshToken);
-        return { user, tokens }
+        return { user, accessToken }
     }
 
 }

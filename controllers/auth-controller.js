@@ -12,8 +12,10 @@ class AuthController {
             res.cookie("refreshToken",
                 userData.tokens.refreshToken,
                 {
-                    maxAge: 30 * 24 * 60 * 60 * 1000,
                     httpOnly: true,
+                    // remove both next keys after deploy on same domain
+                    sameSite: "none",
+                    secure: true
                 }
             )
             userData.user.password = '';
@@ -44,8 +46,10 @@ class AuthController {
             res.cookie("refreshToken", 
                 createdUser.tokens.refreshToken, 
                 {
-                    maxAge: 30 * 24 * 60 * 60 * 1000,
                     httpOnly: true,
+                    // remove both next keys after deploy on same domain
+                    sameSite: "none",
+                    secure: true
                 }
             );
             createdUser.user.password = '';
@@ -74,16 +78,9 @@ class AuthController {
             const {refreshToken} = req.cookies;
             const userData = await authService.refresh(refreshToken);
             userData.user.password = '';
-            res.cookie("refreshToken",
-                userData.tokens.refreshToken,
-                {
-                    maxAge: 30 * 24 * 60 * 60 * 1000,
-                    httpOnly: true,
-                }
-            );
             res.json({
                 user: userData.user,
-                token: userData.tokens.accessToken
+                token: userData.accessToken
             });
         } catch(e) {
             next(e);
