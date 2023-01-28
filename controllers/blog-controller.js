@@ -44,7 +44,7 @@ class BlogController {
             const userId = req.user.id;
             const date = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-            if(title.length > 199 || text.length > 1999) {
+            if(title.length > 60 || text.length > 1999) {
                 return next(ApiError.htmlChange())
             }
 
